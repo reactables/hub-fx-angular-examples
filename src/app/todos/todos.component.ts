@@ -60,10 +60,8 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
         todos: state.todos.reduce((acc, todo) => {
           const todoId = (action as Action<UpdateTodoPayload>).payload?.todoId;
 
-          const status =
-            (action as Action<UpdateTodoPayload>).payload?.status ||
-            todo.status;
-
+          const status = (action as Action<UpdateTodoPayload>).payload
+            ?.status as TodoStatus;
           if (todo.id === todoId) {
             return acc.concat({
               ...todo,

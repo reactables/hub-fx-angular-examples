@@ -7,9 +7,7 @@ export interface Todo {
   updating: boolean;
 }
 
-export type UpdateTodoPayload =
-  | {
-      todoId: number;
-      status: TodoStatus;
-    }
-  | undefined;
+export type UpdateTodoPayload = {
+  todoId: number;
+  status: TodoStatus;
+};
