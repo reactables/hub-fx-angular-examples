@@ -6,7 +6,7 @@ import { UpdateTodoPayload } from './models/Todos';
 @Injectable({
   providedIn: 'root',
 })
-export class TodoServiceService {
+export class TodoService {
   constructor() {}
 
   updateTodo(payload: UpdateTodoPayload): Observable<UpdateTodoPayload> {

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { Reducer, Effect, Action } from '@hub-fx/core';
-import { UpdateTodoPayload, Todo } from '../models/Todos';
-import { TodoServiceService } from '../todo-service.service';
-import { mergeMap, map } from 'rxjs/operators';
+import { Component, OnInit, Input } from '@angular/core';
+import { Reducer, Effect, Action, HubFactory } from '@hub-fx/core';
+import { UpdateTodoPayload, Todo, TodoStatus } from '../models/Todos';
+import { TodoService } from '../todo.service';
+import { mergeMap, map, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 // Actions
 const SEND_TODO_STATUS_UPDATE = 'SEND_TODO_STATUS_UPDATE';
@@ -18,7 +19,28 @@ const todoStatusUpdateSuccess = (payload: UpdateTodoPayload) => ({
 });
 
 // Reducer
-const reducer: Reducer<{ todos: Todo[] }> = (state = { todos: [] }, action) => {
+interface TodosState {
+  todos: Todo[];
+}
+
+const initialState: TodosState = {
+  todos: [
+    {
+      id: 1,
+      description: 'Pick Up Bart',
+      status: 'incomplete',
+      updating: false,
+    },
+    {
+      id: 2,
+      description: 'Moe the lawn',
+      status: 'incomplete',
+      updating: false,
+    },
+  ],
+};
+
+const reducer: Reducer<TodosState> = (state = initialState, action) => {
   switch (action?.type) {
     case SEND_TODO_STATUS_UPDATE:
       return {
@@ -56,13 +78,14 @@ const reducer: Reducer<{ todos: Todo[] }> = (state = { todos: [] }, action) => {
   return state;
 };
 
-const updateTodoEffect =
-  (
-    todoService: TodoServiceService
-  ): Effect<UpdateTodoPayload, UpdateTodoPayload> =>
+export const updateTodoEffect =
+  (todoService: TodoService): Effect<unknown, unknown> =>
   (actions$) => {
     return actions$.pipe(
-      mergeMap(({ payload }) => todoService.updateTodo(payload)),
+      filter((action) => action.type === SEND_TODO_STATUS_UPDATE),
+      mergeMap(({ payload }) =>
+        todoService.updateTodo(payload as UpdateTodoPayload)
+      ),
       map((payload) => todoStatusUpdateSuccess(payload))
     );
   };
@@ -72,4 +95,18 @@ const updateTodoEffect =
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.scss'],
 })
-export class TodosComponent {}
+export class TodosComponent implements OnInit {
+  @Input() hub = HubFactory({ effects: [updateTodoEffect(this.todoService)] });
+
+  constructor(public todoService: TodoService) {}
+  state$: Observable<TodosState> | undefined;
+
+  statusChange(todoId: number, event: Event) {
+    const status = (event.target as HTMLSelectElement).value as TodoStatus;
+    this.hub.dispatch(sendTodoStatusUpdate({ todoId, status }));
+  }
+
+  ngOnInit() {
+    this.state$ = this.hub.store({ reducer });
+  }
+}
