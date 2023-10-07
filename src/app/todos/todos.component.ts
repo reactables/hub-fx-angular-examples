@@ -79,13 +79,13 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
 };
 
 export const updateTodoEffect =
-  (todoService: TodoService): Effect<unknown, unknown> =>
+  (
+    updateTodo: (payload: UpdateTodoPayload) => Observable<UpdateTodoPayload>
+  ): Effect<unknown, unknown> =>
   (actions$) => {
     return actions$.pipe(
       filter((action) => action.type === SEND_TODO_STATUS_UPDATE),
-      mergeMap(({ payload }) =>
-        todoService.updateTodo(payload as UpdateTodoPayload)
-      ),
+      mergeMap(({ payload }) => updateTodo(payload as UpdateTodoPayload)),
       map((payload) => todoStatusUpdateSuccess(payload))
     );
   };
@@ -96,7 +96,9 @@ export const updateTodoEffect =
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
-  @Input() hub = HubFactory({ effects: [updateTodoEffect(this.todoService)] });
+  @Input() hub = HubFactory({
+    effects: [updateTodoEffect(this.todoService.updateTodo)],
+  });
 
   constructor(public todoService: TodoService) {}
   state$: Observable<TodosState> | undefined;
