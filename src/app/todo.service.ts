@@ -10,6 +10,6 @@ export class TodoService {
   constructor() {}
 
   updateTodo(payload: UpdateTodoPayload): Observable<UpdateTodoPayload> {
-    return of(payload).pipe(delay(1000));
+    return of(payload).pipe(delay(2000));
   }
 }

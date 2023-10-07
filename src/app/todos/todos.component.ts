@@ -2,14 +2,28 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Reducer, Effect, Action, HubFactory } from '@hub-fx/core';
 import { UpdateTodoPayload, Todo, TodoStatus } from '../models/Todos';
 import { TodoService } from '../todo.service';
-import { mergeMap, map, filter } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 // Actions
 const SEND_TODO_STATUS_UPDATE = 'SEND_TODO_STATUS_UPDATE';
-const sendTodoStatusUpdate = (payload: UpdateTodoPayload) => ({
+const sendTodoStatusUpdate = (
+  payload: UpdateTodoPayload,
+  updateTodo: (payload: UpdateTodoPayload) => Observable<UpdateTodoPayload>
+) => ({
   type: SEND_TODO_STATUS_UPDATE,
   payload,
+  scopedEffects: {
+    key: payload.todoId.toString(),
+    effects: [
+      (actions$: Observable<Action<UpdateTodoPayload>>) => {
+        return actions$.pipe(
+          mergeMap(({ payload }) => updateTodo(payload as UpdateTodoPayload)),
+          map((payload) => todoStatusUpdateSuccess(payload))
+        );
+      },
+    ],
+  },
 });
 
 const TODO_STATUS_UPDATE_SUCCESS = 'TODO_STATUS_UPDATE_SUCCESS';
@@ -62,6 +76,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
 
           const status = (action as Action<UpdateTodoPayload>).payload
             ?.status as TodoStatus;
+
           if (todo.id === todoId) {
             return acc.concat({
               ...todo,
@@ -76,34 +91,25 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
   return state;
 };
 
-export const updateTodoEffect =
-  (
-    updateTodo: (payload: UpdateTodoPayload) => Observable<UpdateTodoPayload>
-  ): Effect<unknown, unknown> =>
-  (actions$) => {
-    return actions$.pipe(
-      filter((action) => action.type === SEND_TODO_STATUS_UPDATE),
-      mergeMap(({ payload }) => updateTodo(payload as UpdateTodoPayload)),
-      map((payload) => todoStatusUpdateSuccess(payload))
-    );
-  };
-
 @Component({
   selector: 'app-todos',
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
-  @Input() hub = HubFactory({
-    effects: [updateTodoEffect(this.todoService.updateTodo)],
-  });
+  @Input() hub = HubFactory();
 
   constructor(public todoService: TodoService) {}
   state$: Observable<TodosState> | undefined;
 
   statusChange(todoId: number, event: Event) {
     const status = (event.target as HTMLSelectElement).value as TodoStatus;
-    this.hub.dispatch(sendTodoStatusUpdate({ todoId, status }));
+    this.hub.dispatch(
+      sendTodoStatusUpdate(
+        { todoId, status },
+        this.todoService.updateTodo
+      ) as Action<unknown>
+    );
   }
 
   ngOnInit() {
