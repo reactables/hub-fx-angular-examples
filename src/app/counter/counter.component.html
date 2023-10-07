@@ -1,0 +1,13 @@
+<div *ngIf="state$ | async as state">
+  Count: {{ state.count }}
+  <br />
+  <br />
+  <button type="button" (click)="hub.dispatch({ type: 'increment' })">
+    Increment
+  </button>
+  <br />
+  <br />
+  <button type="button" (click)="hub.dispatch({ type: 'reset' })">
+    Reset Counter
+  </button>
+</div>
