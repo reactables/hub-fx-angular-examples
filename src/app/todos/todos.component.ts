@@ -102,7 +102,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
-  // Intialize or provide hub from an ancestor component
+  // Intialize a hub or provide one from an ancestor component
   @Input() hub = HubFactory();
 
   constructor(public todoService: TodoService) {}
