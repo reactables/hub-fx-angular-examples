@@ -1,1 +1,3 @@
-<p>event-tickets works!</p>
+<ng-container *ngIf="control$ | async as control">
+  <ng-container *ngIf="priceInfo$ | async as priceInfo"> </ng-container>
+</ng-container>

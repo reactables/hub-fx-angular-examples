@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { switchMap, map } from 'rxjs/operators';
 import { Action, Reducer, HubFactory } from '@hub-fx/core';
 import { EventTypes, FetchPricePayload } from '../Models/EventTypes';
@@ -44,12 +44,12 @@ export const fetchPrice = (
 
 // Reducers
 interface ControlState {
-  selectedEvent: EventTypes | null;
+  selectedEvent: EventTypes;
   qty: number;
 }
 
 const initialControlState: ControlState = {
-  selectedEvent: null,
+  selectedEvent: EventTypes.ChiliCookOff,
   qty: 0,
 };
 
@@ -83,11 +83,50 @@ const initialPriceState = {
   price: null,
 };
 
-const priceReducer: Reducer<PriceState> = (state = initialPriceState) => {};
+const priceReducer: Reducer<PriceState> = (
+  state = initialPriceState,
+  action
+) => {
+  switch (action?.type) {
+    case FETCH_PRICE:
+      return {
+        ...state,
+        calculating: true,
+      };
+    case FETCH_PRICE_SUCCESS:
+      return {
+        ...state,
+        calculating: false,
+        price: action.payload as number,
+      };
+    default:
+      return state;
+  }
+};
 
 @Component({
   selector: 'app-event-tickets',
   templateUrl: './event-tickets.component.html',
   styleUrls: ['./event-tickets.component.scss'],
 })
-export class EventTicketsComponent {}
+export class EventTicketsComponent implements OnInit {
+  @Input() hub = HubFactory();
+  control$: Observable<ControlState> | undefined;
+  priceInfo$: Observable<PriceState> | undefined;
+
+  constructor(private ticketService: TicketService) {}
+
+  ngOnInit() {
+    this.control$ = this.hub.store({ reducer: controlReducer });
+
+    this.priceInfo$ = HubFactory({
+      sources: [
+        this.control$.pipe(
+          map(({ qty, selectedEvent: event }) =>
+            fetchPrice({ qty, event }, this.ticketService.getPrice)
+          )
+        ),
+      ],
+    }).store({ reducer: priceReducer });
+  }
+}
