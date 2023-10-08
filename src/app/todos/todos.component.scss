@@ -1,7 +1,11 @@
 .todo {
   display: flex;
+  padding: 16px;
+  border: 1px solid black;
+  width: 300px;
+  margin-bottom: 30px;
 
   &__control {
-    margin-left: 30px;
+    margin-left: auto;
   }
 }
