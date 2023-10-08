@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HubFactory, Reducer } from '@hub-fx/core';
 import { Observable } from 'rxjs';
 
-// Pure reducer function to handle state updates
+// Reducer function to handle state updates
 const countReducer: Reducer<{ count: number }> = (
   state = { count: 0 },
   action
@@ -23,11 +23,14 @@ const countReducer: Reducer<{ count: number }> = (
   styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
+  // Initialize Hub ()
   // A component can have its own hub or connect to one from an ancestor component
   @Input() hub = HubFactory();
+
   state$: Observable<{ count: number }> | undefined;
 
   ngOnInit() {
+    // Create observable stream
     this.state$ = this.hub.store({ reducer: countReducer });
   }
 }
