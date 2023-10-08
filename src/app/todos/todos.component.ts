@@ -60,13 +60,16 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
       return {
         todos: state.todos.reduce((acc, todo) => {
           const todoId = (action as Action<UpdateTodoPayload>).payload?.todoId;
-          if (todo.id === todoId) {
-            return acc.concat({
-              ...todo,
-              updating: true,
-            });
-          }
-          return acc.concat(todo);
+
+          const newTodo =
+            todo.id === todoId
+              ? {
+                  ...todo,
+                  updating: true,
+                }
+              : todo;
+
+          return acc.concat(newTodo);
         }, [] as Todo[]),
       };
     case TODO_STATUS_UPDATE_SUCCESS:
@@ -77,14 +80,16 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
           const status = (action as Action<UpdateTodoPayload>).payload
             ?.status as TodoStatus;
 
-          if (todo.id === todoId) {
-            return acc.concat({
-              ...todo,
-              status,
-              updating: false,
-            });
-          }
-          return acc.concat(todo);
+          const newTodo =
+            todo.id === todoId
+              ? {
+                  ...todo,
+                  status,
+                  updating: false,
+                }
+              : todo;
+
+          return acc.concat(newTodo);
         }, [] as Todo[]),
       };
   }
