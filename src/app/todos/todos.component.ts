@@ -59,7 +59,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
     case SEND_TODO_STATUS_UPDATE:
       return {
         todos: state.todos.reduce((acc, todo) => {
-          const todoId = (action as Action<UpdateTodoPayload>).payload?.todoId;
+          const todoId = (<UpdateTodoPayload>action.payload).todoId;
 
           const newTodo =
             todo.id === todoId
@@ -75,10 +75,8 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
     case TODO_STATUS_UPDATE_SUCCESS:
       return {
         todos: state.todos.reduce((acc, todo) => {
-          const todoId = (action as Action<UpdateTodoPayload>).payload?.todoId;
-
-          const status = (action as Action<UpdateTodoPayload>).payload
-            ?.status as TodoStatus;
+          const todoId = (<UpdateTodoPayload>action.payload).todoId;
+          const status = (<UpdateTodoPayload>action.payload).status;
 
           const newTodo =
             todo.id === todoId
