@@ -7,13 +7,17 @@ import { Observable } from 'rxjs';
 
 // Actions
 const SEND_TODO_STATUS_UPDATE = 'SEND_TODO_STATUS_UPDATE';
-const sendTodoStatusUpdate = (payload: UpdateTodoPayload) => ({
+const sendTodoStatusUpdate = (
+  payload: UpdateTodoPayload
+): Action<UpdateTodoPayload> => ({
   type: SEND_TODO_STATUS_UPDATE,
   payload,
 });
 
 const TODO_STATUS_UPDATE_SUCCESS = 'TODO_STATUS_UPDATE_SUCCESS';
-const todoStatusUpdateSuccess = (payload: UpdateTodoPayload) => ({
+const todoStatusUpdateSuccess = (
+  payload: UpdateTodoPayload
+): Action<UpdateTodoPayload> => ({
   type: TODO_STATUS_UPDATE_SUCCESS,
   payload,
 });
@@ -44,6 +48,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
   switch (action?.type) {
     case SEND_TODO_STATUS_UPDATE:
       return {
+        // Find todo and setting updating flag to true
         todos: state.todos.reduce((acc, todo) => {
           const { todoId } = <UpdateTodoPayload>action.payload;
 
@@ -55,6 +60,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
       };
     case TODO_STATUS_UPDATE_SUCCESS:
       return {
+        // Find todo and mark new status and set updating flag to false
         todos: state.todos.reduce((acc, todo) => {
           const { todoId, status } = <UpdateTodoPayload>action.payload;
 
@@ -70,12 +76,16 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
 
 const updateTodoEffect =
   (
+    // Provide the method from Todos API service for updating Todos
     updateTodo: (payload: UpdateTodoPayload) => Observable<UpdateTodoPayload>
   ): Effect<unknown, unknown> =>
   (actions$) => {
     return actions$.pipe(
+      // Effect will only react for update todo action
       filter((action) => action.type === SEND_TODO_STATUS_UPDATE),
+      // Call todo API Service
       mergeMap(({ payload }) => updateTodo(payload as UpdateTodoPayload)),
+      // Map success response to appropriate action
       map((payload) => todoStatusUpdateSuccess(payload))
     );
   };
@@ -87,10 +97,12 @@ const updateTodoEffect =
 })
 export class TodosComponent implements OnInit {
   @Input() hub = HubFactory({
+    // Intialize hub with the update todo effect in the hub config
     effects: [updateTodoEffect(this.todoService.updateTodo)],
   });
 
-  constructor(public todoService: TodoService) {}
+  constructor(private todoService: TodoService) {}
+
   state$: Observable<TodosState> | undefined;
 
   statusChange(todoId: number, event: Event) {
@@ -99,6 +111,7 @@ export class TodosComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Create state observable stream on component initialization
     this.state$ = this.hub.store({ reducer });
   }
 }
