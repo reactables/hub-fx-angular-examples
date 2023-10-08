@@ -10,7 +10,7 @@ const SEND_TODO_STATUS_UPDATE = 'SEND_TODO_STATUS_UPDATE';
 const sendTodoStatusUpdate = (
   payload: UpdateTodoPayload,
   updateTodo: (payload: UpdateTodoPayload) => Observable<UpdateTodoPayload>
-) => ({
+): Action<UpdateTodoPayload, UpdateTodoPayload> => ({
   type: SEND_TODO_STATUS_UPDATE,
   payload,
   scopedEffects: {
@@ -27,7 +27,9 @@ const sendTodoStatusUpdate = (
 });
 
 const TODO_STATUS_UPDATE_SUCCESS = 'TODO_STATUS_UPDATE_SUCCESS';
-const todoStatusUpdateSuccess = (payload: UpdateTodoPayload) => ({
+const todoStatusUpdateSuccess = (
+  payload: UpdateTodoPayload
+): Action<UpdateTodoPayload> => ({
   type: TODO_STATUS_UPDATE_SUCCESS,
   payload,
 });
