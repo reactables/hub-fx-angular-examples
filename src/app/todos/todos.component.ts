@@ -102,12 +102,11 @@ const updateTodoEffect =
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
-  // Intialize hub with the update todo effect in the hub config
+  // Intialize new hub or provide one from an ancestor component
+  // Declare effect in the hub config (if a hub is provided declare in that hub initialization)
   @Input() hub = HubFactory({
     effects: [updateTodoEffect(this.todoService.updateTodo)],
   });
-  // If you choose a hub from an ancestor component
-  // declare the effect in the ancestor's hub config
 
   constructor(private todoService: TodoService) {}
 
