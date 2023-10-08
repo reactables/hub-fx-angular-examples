@@ -27,22 +27,27 @@ export const fetchPriceSuccess = (price: number): Action<number> => ({
 export const FETCH_PRICE = 'FETCH_PRICE';
 export const fetchPrice = (
   payload: FetchPricePayload,
+  // Provide method for calling get price API service
   getPrice: (payload: FetchPricePayload) => Observable<number>
 ): Action<FetchPricePayload, number> => ({
   type: FETCH_PRICE,
   payload,
   scopedEffects: {
+    // Scoped Effects to listen for FETCH_PRICE action and handling get price API call
     effects: [
       (actions$) =>
         actions$.pipe(
+          // Call get price API Service - switchMap operator cancels previous pending call if a new one is initiated
           switchMap(({ payload }) => getPrice(payload as FetchPricePayload)),
+
+          // Map success response to appropriate action
           map((price) => fetchPriceSuccess(price))
         ),
     ],
   },
 });
 
-// Reducers
+// Control State
 interface ControlState {
   selectedEvent: EventTypes;
   qty: number;
@@ -53,6 +58,7 @@ const initialControlState: ControlState = {
   qty: 0,
 };
 
+// Reducer to handle control state updates
 const controlReducer: Reducer<ControlState> = (
   state = initialControlState,
   action
@@ -73,6 +79,8 @@ const controlReducer: Reducer<ControlState> = (
   }
 };
 
+// Price Info State
+
 interface PriceState {
   calculating: boolean;
   price: number | null;
@@ -83,6 +91,7 @@ const initialPriceState = {
   price: null,
 };
 
+// Reducer to handle price info updates
 const priceReducer: Reducer<PriceState> = (
   state = initialPriceState,
   action
@@ -110,7 +119,9 @@ const priceReducer: Reducer<PriceState> = (
   styleUrls: ['./event-tickets.component.scss'],
 })
 export class EventTicketsComponent implements OnInit {
+  // Initialize a hub or provide one from an ancestor component
   @Input() hub = HubFactory();
+
   control$: Observable<ControlState> | undefined;
   priceInfo$: Observable<PriceState> | undefined;
 
@@ -127,11 +138,16 @@ export class EventTicketsComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Initialize observable stream for the control state
     this.control$ = this.hub.store({ reducer: controlReducer });
 
+    // Initialize observable stream for the price info state
     this.priceInfo$ = HubFactory({
+      // Declare control$ stream as a source for priceInfo$.
       sources: [
         this.control$.pipe(
+          // Map state changes from control$
+          // to trigger FETCH_PRICE action for the priceInfo$ stream
           map(({ qty, selectedEvent: event }) =>
             fetchPrice(
               { qty, event },
