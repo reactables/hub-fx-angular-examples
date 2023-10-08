@@ -14,7 +14,7 @@ const sendTodoStatusUpdate = (
   type: SEND_TODO_STATUS_UPDATE,
   payload,
   scopedEffects: {
-    key: payload.todoId.toString(),
+    key: payload.todoId,
     effects: [
       (actions$: Observable<Action<UpdateTodoPayload>>) => {
         return actions$.pipe(
