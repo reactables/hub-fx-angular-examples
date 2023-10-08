@@ -103,7 +103,6 @@ const updateTodoEffect =
 })
 export class TodosComponent implements OnInit {
   // Intialize hub with the update todo effect in the hub config
-
   @Input() hub = HubFactory({
     effects: [updateTodoEffect(this.todoService.updateTodo)],
   });
@@ -119,7 +118,6 @@ export class TodosComponent implements OnInit {
 
   ngOnInit() {
     // Create state observable stream on component initialization
-
     this.state$ = this.hub.store({ reducer });
   }
 }
