@@ -146,8 +146,7 @@ export class EventTicketsComponent implements OnInit {
       // Declare control$ stream as a source for priceInfo$.
       sources: [
         this.control$.pipe(
-          // Map state changes from control$
-          // to trigger FETCH_PRICE action for the priceInfo$ stream
+          // Map state changes from control$ to trigger FETCH_PRICE action for the priceInfo$ stream
           map(({ qty, selectedEvent: event }) =>
             fetchPrice(
               { qty, event },
