@@ -1,7 +1,7 @@
 <div class="event-tickets">
   <ng-container *ngIf="control$ | async as control">
     <div class="event-tickets__event-select">
-      <label for="event-selection"></label>
+      <label for="event-selection">Select an Event: </label>
       <select
         id="event-selection"
         [ngModel]="control.selectedEvent"
@@ -15,7 +15,7 @@
       </select>
     </div>
     <div class="event-tickets__qty">
-      <label for="qty">Qty</label>
+      <label for="qty">Qty:</label>
       <input
         id="qty"
         type="number"
@@ -29,7 +29,9 @@
           <span>Calculating ...</span>
         </ng-container>
         <ng-template #showInfo>
-          <div>{{ priceInfo.price }}</div>
+          <div>
+            <b>Price Total: ${{ priceInfo.price }}</b>
+          </div>
         </ng-template>
       </div>
     </ng-container>
