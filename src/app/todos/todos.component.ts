@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 // Actions
 const SEND_TODO_STATUS_UPDATE = 'SEND_TODO_STATUS_UPDATE';
 const sendTodoStatusUpdate = (
-  payload: UpdateTodoPayload
+  payload: UpdateTodoPayload // { todoId: number, status: 'done' | 'incomplete' | 'in progress' }
 ): Action<UpdateTodoPayload> => ({
   type: SEND_TODO_STATUS_UPDATE,
   payload,
