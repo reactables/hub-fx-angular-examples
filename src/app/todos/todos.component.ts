@@ -106,6 +106,8 @@ export class TodosComponent implements OnInit {
   @Input() hub = HubFactory({
     effects: [updateTodoEffect(this.todoService.updateTodo)],
   });
+  // If you choose a hub from an ancestor component
+  // declare the effect in the ancestor's hub config
 
   constructor(private todoService: TodoService) {}
 
