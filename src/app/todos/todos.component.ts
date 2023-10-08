@@ -76,7 +76,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
   return state;
 };
 
-export const updateTodoEffect =
+const updateTodoEffect =
   (
     updateTodo: (payload: UpdateTodoPayload) => Observable<UpdateTodoPayload>
   ): Effect<unknown, unknown> =>
