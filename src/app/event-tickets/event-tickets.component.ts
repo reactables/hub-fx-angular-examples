@@ -116,6 +116,16 @@ export class EventTicketsComponent implements OnInit {
 
   constructor(private ticketService: TicketService) {}
 
+  setQty(event: Event) {
+    this.hub.dispatch(setQty(+(<HTMLInputElement>event.target).value));
+  }
+
+  selectEvent(event: Event) {
+    this.hub.dispatch(
+      selectEvent((<HTMLSelectElement>event.target).value as EventTypes)
+    );
+  }
+
   ngOnInit() {
     this.control$ = this.hub.store({ reducer: controlReducer });
 
@@ -123,7 +133,10 @@ export class EventTicketsComponent implements OnInit {
       sources: [
         this.control$.pipe(
           map(({ qty, selectedEvent: event }) =>
-            fetchPrice({ qty, event }, this.ticketService.getPrice)
+            fetchPrice(
+              { qty, event },
+              this.ticketService.getPrice.bind(this.ticketService)
+            )
           )
         ),
       ],
