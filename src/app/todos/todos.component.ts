@@ -83,8 +83,10 @@ const updateTodoEffect =
     return actions$.pipe(
       // Effect will only react for update todo action
       filter((action) => action.type === SEND_TODO_STATUS_UPDATE),
+
       // Call todo API Service
       mergeMap(({ payload }) => updateTodo(payload as UpdateTodoPayload)),
+
       // Map success response to appropriate action
       map((payload) => todoStatusUpdateSuccess(payload))
     );
@@ -96,8 +98,9 @@ const updateTodoEffect =
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
+  // Intialize hub with the update todo effect in the hub config
+
   @Input() hub = HubFactory({
-    // Intialize hub with the update todo effect in the hub config
     effects: [updateTodoEffect(this.todoService.updateTodo)],
   });
 
@@ -112,6 +115,7 @@ export class TodosComponent implements OnInit {
 
   ngOnInit() {
     // Create state observable stream on component initialization
+
     this.state$ = this.hub.store({ reducer });
   }
 }
