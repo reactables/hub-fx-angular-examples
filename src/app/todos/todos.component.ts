@@ -46,6 +46,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
       return {
         todos: state.todos.reduce((acc, todo) => {
           const todoId = (action as Action<UpdateTodoPayload>).payload?.todoId;
+
           if (todo.id === todoId) {
             return acc.concat({
               ...todo,
@@ -62,6 +63,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
 
           const status = (action as Action<UpdateTodoPayload>).payload
             ?.status as TodoStatus;
+
           if (todo.id === todoId) {
             return acc.concat({
               ...todo,
