@@ -1,6 +1,6 @@
 <h1>Event Prices!</h1>
 <div class="event-tickets">
-  <ng-container *ngIf="control$ | async as control">
+  <ng-container *ngIf="state?.control$ | async as control">
     <div class="event-tickets__event-select">
       <label for="event-selection">Select an Event: </label>
       <select
@@ -24,7 +24,7 @@
         [ngModel]="control.qty"
       />
     </div>
-    <ng-container *ngIf="priceInfo$ | async as priceInfo">
+    <ng-container *ngIf="state?.priceInfo$ | async as priceInfo">
       <div class="event-tickets__price-info">
         <ng-container *ngIf="priceInfo.calculating; else showInfo">
           <span>Calculating ...</span>
