@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Reducer, Effect, Action, HubFactory } from '@hub-fx/core';
+import { Reducer, Action, HubFactory } from '@hub-fx/core';
 import { UpdateTodoPayload, Todo, TodoStatus } from '../models/Todos';
 import { TodoService } from '../todo.service';
-import { mergeMap, map } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 // Actions
@@ -18,7 +18,7 @@ const sendTodoStatusUpdate = (
     effects: [
       (actions$: Observable<Action<UpdateTodoPayload>>) => {
         return actions$.pipe(
-          mergeMap(({ payload }) => updateTodo(payload as UpdateTodoPayload)),
+          switchMap(({ payload }) => updateTodo(payload as UpdateTodoPayload)),
           map((payload) => todoStatusUpdateSuccess(payload))
         );
       },
@@ -105,10 +105,7 @@ export class TodosComponent implements OnInit {
   statusChange(todoId: number, event: Event) {
     const status = (event.target as HTMLSelectElement).value as TodoStatus;
     this.hub.dispatch(
-      sendTodoStatusUpdate(
-        { todoId, status },
-        this.todoService.updateTodo
-      ) as Action<unknown>
+      sendTodoStatusUpdate({ todoId, status }, this.todoService.updateTodo)
     );
   }
 
