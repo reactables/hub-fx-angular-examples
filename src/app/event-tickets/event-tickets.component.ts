@@ -19,7 +19,7 @@ export const setQty = (qty: number): Action<number> => ({
 });
 
 export const FETCH_PRICE_SUCCESS = 'FETCH_PRICE_SUCCESS';
-export const fetchPriceSuccess = (price: number) => ({
+export const fetchPriceSuccess = (price: number): Action<number> => ({
   type: FETCH_PRICE_SUCCESS,
   payload: price,
 });
@@ -28,7 +28,7 @@ export const FETCH_PRICE = 'FETCH_PRICE';
 export const fetchPrice = (
   payload: FetchPricePayload,
   getPrice: (payload: FetchPricePayload) => Observable<number>
-): Action<FetchPricePayload> => ({
+): Action<FetchPricePayload, number> => ({
   type: FETCH_PRICE,
   payload,
   scopedEffects: {
