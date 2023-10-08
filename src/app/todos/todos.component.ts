@@ -8,17 +8,24 @@ import { Observable } from 'rxjs';
 // Actions
 const SEND_TODO_STATUS_UPDATE = 'SEND_TODO_STATUS_UPDATE';
 const sendTodoStatusUpdate = (
-  payload: UpdateTodoPayload,
+  payload: UpdateTodoPayload, // { todoId: number, status: 'done' | 'incomplete' | 'in progress' }
+  // Provide the method from Todos API service for updating Todos
   updateTodo: (payload: UpdateTodoPayload) => Observable<UpdateTodoPayload>
 ): Action<UpdateTodoPayload, UpdateTodoPayload> => ({
   type: SEND_TODO_STATUS_UPDATE,
   payload,
   scopedEffects: {
+    // Provide key so effect stream is dynamically created for SEND_TODO_STATUS_UPDATE on todo.id
     key: payload.todoId,
+
+    // Scoped Effects to listen for update todo action and handling update todo API call
     effects: [
       (actions$: Observable<Action<UpdateTodoPayload>>) => {
         return actions$.pipe(
+          // Call todo API Service - switchMap operator cancels previous pending call if a new one is initiated
           switchMap(({ payload }) => updateTodo(payload as UpdateTodoPayload)),
+
+          // Map success response to appropriate action
           map((payload) => todoStatusUpdateSuccess(payload))
         );
       },
@@ -34,7 +41,7 @@ const todoStatusUpdateSuccess = (
   payload,
 });
 
-// Reducer
+// State
 interface TodosState {
   todos: Todo[];
 }
@@ -56,9 +63,12 @@ const initialState: TodosState = {
   ],
 };
 
+// Reducer for updating state
 const reducer: Reducer<TodosState> = (state = initialState, action) => {
   switch (action?.type) {
     case SEND_TODO_STATUS_UPDATE:
+      // Find todo and setting updating flag to true
+
       return {
         todos: state.todos.reduce((acc, todo) => {
           const { todoId } = <UpdateTodoPayload>action.payload;
@@ -70,6 +80,8 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
         }, [] as Todo[]),
       };
     case TODO_STATUS_UPDATE_SUCCESS:
+      // Find todo and mark new status and set updating flag to false
+
       return {
         todos: state.todos.reduce((acc, todo) => {
           const { todoId, status } = <UpdateTodoPayload>action.payload;
@@ -90,6 +102,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
+  // Intialize or provide hub from an ancestor component
   @Input() hub = HubFactory();
 
   constructor(public todoService: TodoService) {}
@@ -103,6 +116,7 @@ export class TodosComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Create state observable stream on component initialization
     this.state$ = this.hub.store({ reducer });
   }
 }
