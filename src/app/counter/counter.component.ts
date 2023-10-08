@@ -30,8 +30,7 @@ const countReducer: Reducer<{ count: number }> = (
   styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
-  // Initialize Hub ()
-  // A component can have its own hub or connect to one from an ancestor component
+  // Initialize a hub or provide one from an ancestor component
   @Input() hub = HubFactory();
 
   state$: Observable<{ count: number }> | undefined;
