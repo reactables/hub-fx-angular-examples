@@ -22,7 +22,7 @@ const todoStatusUpdateSuccess = (
   payload,
 });
 
-// Reducer
+// State
 interface TodosState {
   todos: Todo[];
 }
@@ -44,11 +44,13 @@ const initialState: TodosState = {
   ],
 };
 
+// Reducer for updating state
 const reducer: Reducer<TodosState> = (state = initialState, action) => {
   switch (action?.type) {
     case SEND_TODO_STATUS_UPDATE:
       return {
         // Find todo and setting updating flag to true
+
         todos: state.todos.reduce((acc, todo) => {
           const { todoId } = <UpdateTodoPayload>action.payload;
 
@@ -61,6 +63,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
     case TODO_STATUS_UPDATE_SUCCESS:
       return {
         // Find todo and mark new status and set updating flag to false
+
         todos: state.todos.reduce((acc, todo) => {
           const { todoId, status } = <UpdateTodoPayload>action.payload;
 
@@ -74,6 +77,7 @@ const reducer: Reducer<TodosState> = (state = initialState, action) => {
   return state;
 };
 
+// Effect to listen for update todo action and handling update todo API call
 const updateTodoEffect =
   (
     // Provide the method from Todos API service for updating Todos
