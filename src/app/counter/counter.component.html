@@ -3,12 +3,8 @@
   Count: {{ state.count }}
   <br />
   <br />
-  <button type="button" (click)="hub.dispatch({ type: 'increment' })">
-    Increment
-  </button>
+  <button type="button" (click)="increment()">Increment</button>
   <br />
   <br />
-  <button type="button" (click)="hub.dispatch({ type: 'reset' })">
-    Reset Counter
-  </button>
+  <button type="button" (click)="reset()">Reset Counter</button>
 </div>

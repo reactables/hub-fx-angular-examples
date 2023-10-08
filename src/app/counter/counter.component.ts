@@ -1,6 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HubFactory, Reducer } from '@hub-fx/core';
+import { HubFactory, Reducer, Action } from '@hub-fx/core';
 import { Observable } from 'rxjs';
+
+// Actions
+const INCREMENT = 'INCREMENT';
+const increment = (): Action => ({ type: INCREMENT });
+
+const RESET = 'RESET';
+const reset = (): Action => ({ type: RESET });
 
 // Reducer function to handle state updates
 const countReducer: Reducer<{ count: number }> = (
@@ -8,9 +15,9 @@ const countReducer: Reducer<{ count: number }> = (
   action
 ) => {
   switch (action?.type) {
-    case 'increment':
+    case INCREMENT:
       return { count: state.count + 1 };
-    case 'reset':
+    case RESET:
       return { count: 0 };
     default:
       return state;
@@ -28,6 +35,14 @@ export class CounterComponent implements OnInit {
   @Input() hub = HubFactory();
 
   state$: Observable<{ count: number }> | undefined;
+
+  increment() {
+    this.hub.dispatch(increment());
+  }
+
+  reset() {
+    this.hub.dispatch(reset());
+  }
 
   ngOnInit() {
     // Create observable stream
