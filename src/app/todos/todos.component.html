@@ -4,17 +4,15 @@
     <div class="todo">
       {{ todo.description }}
       <div class="todo__control">
-        <div *ngIf="todo.updating; else showSelect">Updating...</div>
-        <ng-template #showSelect>
-          <select
-            [ngModel]="todo.status"
-            (change)="statusChange(todo.id, $event)"
-          >
-            <option [value]="'in progress'">In Progress</option>
-            <option [value]="'incomplete'">Incomplete</option>
-            <option [value]="'done'">Done</option>
-          </select>
-        </ng-template>
+        <div *ngIf="todo.updating">Updating...</div>
+        <select
+          [ngModel]="todo.status"
+          (change)="statusChange(todo.id, $event)"
+        >
+          <option [value]="'in progress'">In Progress</option>
+          <option [value]="'incomplete'">Incomplete</option>
+          <option [value]="'done'">Done</option>
+        </select>
       </div>
     </div>
   </ng-container>
