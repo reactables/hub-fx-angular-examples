@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Reducer, Action, HubFactory } from '@hub-fx/core';
 import { UpdateTodoPayload, Todo, TodoStatus } from '../models/Todos';
 import { TodoService } from '../todo.service';
