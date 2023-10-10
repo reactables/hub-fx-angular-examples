@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HubFactory, Reducer, Action } from '@hub-fx/core';
 import { Observable } from 'rxjs';
 
@@ -30,8 +30,8 @@ const countReducer: Reducer<{ count: number }> = (
   styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
-  // Initialize a hub or provide one from an ancestor component
-  @Input() hub = HubFactory();
+  // Initialize a hub
+  hub = HubFactory();
 
   state$: Observable<{ count: number }> | undefined;
 
