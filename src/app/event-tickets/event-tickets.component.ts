@@ -143,7 +143,7 @@ const buildObservables = (
   styleUrls: ['./event-tickets.component.scss'],
 })
 export class EventTicketsComponent implements OnInit {
-  // Initialize a hub or provide one from an ancestor component
+  // Initialize a hub
   @Input() hub = HubFactory();
 
   state:
