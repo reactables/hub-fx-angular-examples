@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { switchMap, map } from 'rxjs/operators';
 import { Action, Reducer, HubFactory, Hub } from '@hub-fx/core';
 import { EventTypes, FetchPricePayload } from '../Models/EventTypes';
@@ -144,7 +144,7 @@ const buildObservables = (
 })
 export class EventTicketsComponent implements OnInit {
   // Initialize a hub
-  @Input() hub = HubFactory();
+  hub = HubFactory();
 
   state:
     | {
