@@ -1,5 +1,5 @@
 <h1>Todos</h1>
-<div *ngIf="state$ | async as state" class="todos">
+<div *ngIf="todoUpdates.state$ | async as state" class="todos">
   <ng-container *ngFor="let todo of state.todos">
     <div class="todo">
       {{ todo.description }}
@@ -7,7 +7,7 @@
         <div *ngIf="todo.updating">Updating...</div>
         <select
           [ngModel]="todo.status"
-          (change)="statusChange(todo.id, $event)"
+          (change)="sendTodoStatusUpdate(todo.id, $event)"
         >
           <option [value]="'in progress'">In Progress</option>
           <option [value]="'incomplete'">Incomplete</option>
