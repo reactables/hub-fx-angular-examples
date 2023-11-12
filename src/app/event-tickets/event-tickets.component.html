@@ -1,6 +1,6 @@
 <h1>Event Prices!</h1>
 <div class="event-tickets">
-  <ng-container *ngIf="eventTickets?.state$ | async as state">
+  <ng-container *ngIf="eventTickets.state$ | async as state">
     <div class="event-tickets__event-select">
       <label for="event-selection">Select an Event: </label>
       <select
