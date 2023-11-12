@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { TodoService } from '../todo.service';
 import { TodoUpdates, TodoStatus } from '@hub-fx/examples';
 
+// For implementation and tests see:
+// https://github.com/hub-fx/hub-fx/tree/main/packages/examples/src/TodoUpdates
+
 @Component({
   selector: 'app-todos',
   templateUrl: './todos.component.html',
