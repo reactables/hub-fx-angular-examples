@@ -1,11 +1,11 @@
 <h1>Event Prices!</h1>
 <div class="event-tickets">
-  <ng-container *ngIf="state?.control$ | async as control">
+  <ng-container *ngIf="eventTickets?.state$ | async as state">
     <div class="event-tickets__event-select">
       <label for="event-selection">Select an Event: </label>
       <select
         id="event-selection"
-        [ngModel]="control.selectedEvent"
+        [ngModel]="state.controls.selectedEvent"
         (change)="selectEvent($event)"
       >
         <option value="Chili Cook Off">Chili Cook Off</option>
@@ -21,20 +21,18 @@
         id="qty"
         type="number"
         (change)="setQty($event)"
-        [ngModel]="control.qty"
+        [ngModel]="state.controls.qty"
       />
     </div>
-    <ng-container *ngIf="state?.priceInfo$ | async as priceInfo">
-      <div class="event-tickets__price-info">
-        <ng-container *ngIf="priceInfo.calculating; else showInfo">
-          <span>Calculating ...</span>
-        </ng-container>
-        <ng-template #showInfo>
-          <div>
-            <b>Price Total: ${{ priceInfo.price }}</b>
-          </div>
-        </ng-template>
-      </div>
-    </ng-container>
+    <div class="event-tickets__price-info">
+      <ng-container *ngIf="state.calculating; else showInfo">
+        <span>Calculating ...</span>
+      </ng-container>
+      <ng-template #showInfo>
+        <div>
+          <b>Price Total: ${{ state.price }}</b>
+        </div>
+      </ng-template>
+    </div>
   </ng-container>
 </div>

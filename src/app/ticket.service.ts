@@ -1,7 +1,7 @@
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { EventTypes, FetchPricePayload } from './Models/EventTypes';
+import { EventTypes, FetchPricePayload } from '@hub-fx/examples';
 
 @Injectable({
   providedIn: 'root',
