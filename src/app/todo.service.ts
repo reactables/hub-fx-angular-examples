@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { UpdateTodoPayload } from './models/Todos';
+import { UpdateTodoPayload } from '@hub-fx/examples';
 
 @Injectable({
   providedIn: 'root',
