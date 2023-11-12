@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { TicketService } from '../ticket.service';
 import { EventTickets, EventTypes } from '@hub-fx/examples';
 
-// See for implementation
+// For implementation and tests
 // https://github.com/hub-fx/hub-fx/tree/main/packages/examples/src/EventTickets
 
 @Component({
