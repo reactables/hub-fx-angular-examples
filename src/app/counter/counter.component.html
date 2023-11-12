@@ -3,12 +3,8 @@
   Count: {{ state.count }}
   <br />
   <br />
-  <button type="button" (click)="counter.actions['increment']()">
-    Increment
-  </button>
+  <button type="button" (click)="counter.actions.increment()">Increment</button>
   <br />
   <br />
-  <button type="button" (click)="counter.actions['reset']()">
-    Reset Counter
-  </button>
+  <button type="button" (click)="counter.actions.reset()">Reset Counter</button>
 </div>
