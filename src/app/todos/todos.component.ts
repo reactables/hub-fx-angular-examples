@@ -14,6 +14,7 @@ export class TodosComponent {
 
   sendTodoStatusUpdate(todoId: number, event: Event) {
     const status = (event.target as HTMLSelectElement).value as TodoStatus;
-    this.todoUpdates.actions['sendTodoStatusUpdate']({ todoId, status });
+
+    this.todoUpdates.actions.sendTodoStatusUpdate({ todoId, status });
   }
 }
