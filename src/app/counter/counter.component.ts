@@ -8,7 +8,4 @@ import { Counter } from '@hub-fx/examples';
 })
 export class CounterComponent {
   counter = Counter();
-  state$ = this.counter.state$;
-  increment = this.counter.actions['increment'];
-  reset = this.counter.actions['reset'];
 }

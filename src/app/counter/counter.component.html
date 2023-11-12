@@ -1,10 +1,14 @@
 <h1>Counter</h1>
-<div *ngIf="state$ | async as state">
+<div *ngIf="counter.state$ | async as state">
   Count: {{ state.count }}
   <br />
   <br />
-  <button type="button" (click)="increment()">Increment</button>
+  <button type="button" (click)="counter.actions['increment']()">
+    Increment
+  </button>
   <br />
   <br />
-  <button type="button" (click)="reset()">Reset Counter</button>
+  <button type="button" (click)="counter.actions['reset']()">
+    Reset Counter
+  </button>
 </div>
