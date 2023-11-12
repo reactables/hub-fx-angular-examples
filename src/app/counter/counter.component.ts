@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Counter } from '@hub-fx/examples';
 
-// See for implementation
+// For implementation and tests see:
 // https://github.com/hub-fx/hub-fx/tree/main/packages/examples/src/Counter
 
 @Component({
