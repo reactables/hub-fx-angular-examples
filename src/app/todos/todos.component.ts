@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TodoService } from '../todo.service';
-import { TodoUpdates, TodoStatus } from '@hub-fx/examples';
+import { RxTodoUpdates, TodoStatus } from '@hub-fx/examples';
 
 // For implementation and tests see:
 // https://github.com/hub-fx/hub-fx/tree/main/packages/examples/src/TodoUpdates
@@ -11,13 +11,10 @@ import { TodoUpdates, TodoStatus } from '@hub-fx/examples';
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent {
-  constructor(public todoService: TodoService) {}
-
-  todoUpdates = TodoUpdates(this.todoService.updateTodo);
+  todoUpdates = RxTodoUpdates(TodoService.updateTodo);
 
   sendTodoStatusUpdate(todoId: number, event: Event) {
     const status = (event.target as HTMLSelectElement).value as TodoStatus;
-
     this.todoUpdates.actions.sendTodoStatusUpdate({ todoId, status });
   }
 }
