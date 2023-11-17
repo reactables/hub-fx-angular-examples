@@ -11,8 +11,6 @@ import { RxEventTickets, EventTypes } from '@hub-fx/examples';
   styleUrls: ['./event-tickets.component.scss'],
 })
 export class EventTicketsComponent {
-  constructor() {}
-
   eventTickets = RxEventTickets(TicketService.getPrice);
 
   setQty(event: Event) {
