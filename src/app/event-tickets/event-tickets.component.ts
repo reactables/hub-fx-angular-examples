@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TicketService } from '../ticket.service';
-import { EventTickets, EventTypes } from '@hub-fx/examples';
+import { RxEventTickets, EventTypes } from '@hub-fx/examples';
 
 // For implementation and tests
 // https://github.com/hub-fx/hub-fx/tree/main/packages/examples/src/EventTickets
@@ -11,11 +11,9 @@ import { EventTickets, EventTypes } from '@hub-fx/examples';
   styleUrls: ['./event-tickets.component.scss'],
 })
 export class EventTicketsComponent {
-  constructor(private ticketService: TicketService) {}
+  constructor() {}
 
-  eventTickets = EventTickets(
-    this.ticketService.getPrice.bind(this.ticketService)
-  );
+  eventTickets = RxEventTickets(TicketService.getPrice);
 
   setQty(event: Event) {
     this.eventTickets.actions.setQty(+(<HTMLInputElement>event.target).value);

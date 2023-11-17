@@ -1,13 +1,9 @@
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
 import { EventTypes, FetchPricePayload } from '@hub-fx/examples';
 
-@Injectable({
-  providedIn: 'root',
-})
 export class TicketService {
-  private prices = {
+  static prices = {
     [EventTypes.ChiliCookOff]: 20,
     [EventTypes.ItchyAndScratchyMovie]: 40,
     [EventTypes.GrammarRodeo]: 50,
@@ -15,7 +11,7 @@ export class TicketService {
 
   constructor() {}
 
-  getPrice({ event, qty }: FetchPricePayload) {
-    return of(this.prices[event] * qty).pipe(delay(1000));
+  static getPrice({ event, qty }: FetchPricePayload) {
+    return of(TicketService.prices[event] * qty).pipe(delay(1000));
   }
 }
